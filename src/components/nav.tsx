@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { LayoutDashboard, ScrollText, Library } from "lucide-react";
+import { PixelSprite } from "@/components/pixel-sprite";
+import { ELGYEM_SPRITE } from "@/lib/sprites";
 
 const items = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -9,20 +11,27 @@ const items = [
 
 export function Nav() {
   return (
-    <nav className="flex gap-1 border-b border-p-border bg-p-surface px-4 py-2 sm:w-52 sm:flex-col sm:gap-2 sm:border-b-0 sm:border-r sm:px-3 sm:py-4">
-      <span className="hidden px-2 pb-2 font-mono text-xs font-semibold tracking-wide text-p-primary sm:block">
-        ELGYEM CONTROL
-      </span>
-      {items.map(({ href, label, icon: Icon }) => (
-        <Link
-          key={href}
-          href={href}
-          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-p-muted hover:bg-p-kpi-bg hover:text-p-title"
-        >
-          <Icon size={18} />
-          <span>{label}</span>
-        </Link>
-      ))}
+    <nav className="flex items-center gap-2 border-b-2 border-p-title bg-p-surface px-4 py-2 sm:w-56 sm:flex-col sm:items-stretch sm:gap-1 sm:border-b-0 sm:border-r-2 sm:px-3 sm:py-5">
+      <div className="flex items-center gap-2 sm:mb-5 sm:px-1">
+        <PixelSprite src={ELGYEM_SPRITE} alt="Elgyem" size={36} />
+        <span className="font-pixel text-[11px] leading-[1.5] text-p-primary">
+          ELGYEM
+          <br />
+          CONTROL
+        </span>
+      </div>
+      <div className="flex flex-1 gap-1 sm:flex-none sm:flex-col">
+        {items.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className="flex items-center gap-2 rounded-md border-2 border-transparent px-3 py-2 text-sm font-medium text-p-muted transition-colors hover:border-p-border hover:bg-p-kpi-bg hover:text-p-title"
+          >
+            <Icon size={18} />
+            <span>{label}</span>
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }
