@@ -187,18 +187,6 @@ export function GameModal({
               Round (optional)
               <input type="number" name="round" min={1} defaultValue={game?.round ?? ""} className={field} />
             </label>
-            {mode === "add" && (
-              <>
-                <label className={label}>
-                  Game # (BO3)
-                  <input type="number" name="gameNumber" min={1} max={3} defaultValue={1} className={field} />
-                </label>
-                <label className="flex items-center gap-2 self-end pb-1 text-xs text-p-muted">
-                  <input type="checkbox" name="newMatch" value="true" defaultChecked className="accent-p-primary" />
-                  New match (not a continuation)
-                </label>
-              </>
-            )}
           </Section>
 
           <Section title="Setup">
