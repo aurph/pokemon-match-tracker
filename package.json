@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
-    "db:seed": "tsx src/db/seed.ts"
+    "db:seed": "tsx src/db/seed.ts",
+    "fetch-images": "tsx scripts/fetch-card-images.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.10.0",
