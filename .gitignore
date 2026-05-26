@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local sqlite database (recreated by seed) + downloaded card art
+*.db
+*.db-shm
+*.db-wal
+/public/cards/
