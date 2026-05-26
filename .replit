@@ -1,0 +1,24 @@
+# Replit configuration for the Elgyem Control Tracker.
+# Workspace "Run" uses dev; deploy as a RESERVED VM (deploymentTarget = "gce")
+# because the app stores data in a single SQLite file that must live on a
+# persistent, single-instance disk. Do NOT use Autoscale — it's ephemeral and
+# would wipe your logged games.
+
+entrypoint = "src/app/page.tsx"
+run = "pnpm dev -- -H 0.0.0.0 -p ${PORT:-3000}"
+
+[env]
+DB_PATH = "elgyem.db"
+NEXT_TELEMETRY_DISABLED = "1"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "gce"
+build = ["sh", "-c", "pnpm install && pnpm build"]
+run = ["sh", "-c", "pnpm start -- -H 0.0.0.0 -p ${PORT:-3000}"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
