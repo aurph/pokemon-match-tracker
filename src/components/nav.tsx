@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { LayoutDashboard, ScrollText } from "lucide-react";
+import { LayoutDashboard, ScrollText, Library } from "lucide-react";
 
 const items = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/games", label: "Games", icon: ScrollText },
+  { href: "/decklist", label: "Decklist", icon: Library },
 ];
 
 export function Nav() {

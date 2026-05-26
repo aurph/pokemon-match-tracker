@@ -40,3 +40,17 @@ export const OPPONENT_DECKS = [
 export const FORMATS = ["BO1", "BO3"] as const;
 export const GOINGS = ["1st", "2nd"] as const;
 export const RESULTS = ["W", "L", "T"] as const;
+
+export const ROLES = [
+  "Setup / Engine",
+  "Draw / Search",
+  "Lock piece",
+  "Disruption",
+  "Main attacker",
+  "Tech attacker",
+  "Wall / Tank",
+  "Utility",
+  "Recovery",
+  "Energy accel",
+  "Single-copy tech",
+] as const;
