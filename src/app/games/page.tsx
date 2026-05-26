@@ -5,7 +5,7 @@ import { OPPONENT_DECKS } from "@/lib/enums";
 import { PageHeader } from "@/components/page-header";
 import { GamesView } from "@/components/games-view";
 import { PixelSprite } from "@/components/pixel-sprite";
-import { ELGYEM_SPRITE } from "@/lib/sprites";
+import { POKEBALL_SPRITE } from "@/lib/sprites";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +28,7 @@ export default function GamesPage() {
       <PageHeader
         title="Games"
         subtitle="Match log — click any row to edit"
-        icon={<PixelSprite src={ELGYEM_SPRITE} alt="Elgyem" size={36} />}
+        icon={<PixelSprite src={POKEBALL_SPRITE} alt="" size={36} />}
       />
       <GamesView games={games} deckNames={deckNames} opponentDecks={opponentDecks} />
     </div>

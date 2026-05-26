@@ -4,7 +4,7 @@ import { bo3MatchResults, winPct } from "@/lib/stats";
 import { dateStamp } from "@/lib/match-id";
 import { PageHeader } from "@/components/page-header";
 import { PixelSprite } from "@/components/pixel-sprite";
-import { ELGYEM_SPRITE } from "@/lib/sprites";
+import { POKEBALL_SPRITE } from "@/lib/sprites";
 import type { Game } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +53,7 @@ export default function TournamentsPage() {
       <PageHeader
         title="Tournaments"
         subtitle="Auto-grouped by event + day"
-        icon={<PixelSprite src={ELGYEM_SPRITE} alt="Elgyem" size={40} />}
+        icon={<PixelSprite src={POKEBALL_SPRITE} alt="" size={40} />}
       />
 
       {rollups.length === 0 ? (

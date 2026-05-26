@@ -23,5 +23,5 @@ export function spriteForName(name: string): string | null {
   return hit ? `/sprites/${hit.key}.png` : null;
 }
 
-/** The deck's namesake — used as the app mascot in headers and empty states. */
-export const ELGYEM_SPRITE = "/sprites/elgyem.png";
+/** Generic app mascot/logo (pixel Pokéball) for headers and empty states. */
+export const POKEBALL_SPRITE = "/sprites/pokeball.png";

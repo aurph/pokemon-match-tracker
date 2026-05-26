@@ -5,7 +5,7 @@ import { prizeMap, prizeCurse, winPctByHandQuality, handQualityVsLock } from "@/
 import { mulliganRate, avgHandQuality, avgLockTurn } from "@/lib/stats";
 import { PageHeader } from "@/components/page-header";
 import { PixelSprite } from "@/components/pixel-sprite";
-import { spriteForName, ELGYEM_SPRITE } from "@/lib/sprites";
+import { spriteForName, POKEBALL_SPRITE } from "@/lib/sprites";
 import { HandQualityWinrateChart } from "@/components/hand-quality-winrate-chart";
 import { HandLockScatter } from "@/components/hand-lock-scatter";
 
@@ -42,7 +42,7 @@ export default function PrizesPage() {
       <PageHeader
         title="Prizes & Hands"
         subtitle="Which lock pieces get prized — and how your hands play out"
-        icon={<PixelSprite src={ELGYEM_SPRITE} alt="Elgyem" size={40} />}
+        icon={<PixelSprite src={POKEBALL_SPRITE} alt="" size={40} />}
       />
 
       {/* Prize curse callout */}

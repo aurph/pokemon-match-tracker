@@ -1,6 +1,6 @@
-# Elgyem Control Tracker
+# Pokémon Match Tracker
 
-A local-first Pokémon TCG match tracker built around an Elgyem control deck. Log a game in
+A local-first Pokémon TCG match tracker for a single deck. Log a game in
 seconds, watch the dashboard update live, browse your decklist with real card art, and dig into
 matchup spreads, a prize map, win/loss streaks, and hand-quality analytics — all stored on-device
 in SQLite. Pixel/retro flavored, no cloud.

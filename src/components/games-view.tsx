@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Plus, LayoutGrid, Table2 } from "lucide-react";
 import { GameModal } from "./game-modal";
 import { PixelSprite } from "./pixel-sprite";
-import { ELGYEM_SPRITE } from "@/lib/sprites";
+import { POKEBALL_SPRITE } from "@/lib/sprites";
 import type { Game } from "@/db/schema";
 
 const fmtDate = (ms: number) =>
@@ -126,7 +126,7 @@ export function GamesView({
 
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-p-border bg-p-surface p-12 text-center">
-          <PixelSprite src={ELGYEM_SPRITE} alt="Elgyem" size={64} />
+          <PixelSprite src={POKEBALL_SPRITE} alt="" size={64} />
           <p className="text-p-muted">
             {games.length === 0 ? "No games logged yet." : "No games match these filters."}
           </p>

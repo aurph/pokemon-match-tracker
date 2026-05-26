@@ -18,7 +18,7 @@ export default function DecklistPage() {
     <div className="mx-auto max-w-3xl">
       <PageHeader
         title="Decklist"
-        subtitle="Your 60-card Elgyem control list"
+        subtitle="Your 60-card deck"
         actions={
           <div className="flex flex-col items-end leading-none">
             <span className="text-[11px] font-medium uppercase tracking-wide text-p-muted">Total</span>

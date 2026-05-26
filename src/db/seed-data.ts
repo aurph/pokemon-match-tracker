@@ -80,7 +80,7 @@ export function seedFirstIteration(db: DB): void {
       version: "v1.0",
       cardsIn: null,
       cardsOut: null,
-      reasoning: "Initial 60 — Elgyem control baseline.",
+      reasoning: "Starting 60-card list.",
       testedVs: null,
       verdict: "keep",
       createdAt: now,

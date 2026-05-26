@@ -8,8 +8,8 @@ const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrai
 const silkscreen = Silkscreen({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-silkscreen" });
 
 export const metadata: Metadata = {
-  title: "Elgyem Control Tracker",
-  description: "Local-first Pokémon TCG control-deck match tracker",
+  title: "Pokémon Match Tracker",
+  description: "Local-first Pokémon TCG match tracker",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

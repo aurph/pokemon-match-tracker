@@ -24,7 +24,7 @@ import { WinRateChart } from "@/components/win-rate-chart";
 import { HandQualityChart } from "@/components/hand-quality-chart";
 import { MatchupTable } from "@/components/matchup-table";
 import { PixelSprite } from "@/components/pixel-sprite";
-import { ELGYEM_SPRITE } from "@/lib/sprites";
+import { POKEBALL_SPRITE } from "@/lib/sprites";
 
 export const dynamic = "force-dynamic";
 
@@ -60,8 +60,8 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <PageHeader
         title="Dashboard"
-        subtitle="Your Elgyem control deck, at a glance"
-        icon={<PixelSprite src={ELGYEM_SPRITE} alt="Elgyem" size={40} />}
+        subtitle="Your deck & matchups at a glance"
+        icon={<PixelSprite src={POKEBALL_SPRITE} alt="" size={40} />}
       />
 
       {/* Fun, auto-tracked stats */}

@@ -34,7 +34,7 @@ export const OPPONENT_DECKS = [
   "Mew VMAX",
   "Regidrago VSTAR",
   "Other / Rogue",
-  "Mirror (Elgyem Control)",
+  "Mirror Match",
 ] as const;
 
 export const FORMATS = ["BO1", "BO3"] as const;
