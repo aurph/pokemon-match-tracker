@@ -24,7 +24,7 @@ export default function DecklistPage() {
             <span className="text-[11px] font-medium uppercase tracking-wide text-p-muted">Total</span>
             <span
               className={
-                "font-mono text-3xl font-bold tabular-nums " + (legal ? "text-p-good" : "text-p-bad")
+                "font-pixel text-2xl tabular-nums " + (legal ? "text-p-good" : "text-p-bad")
               }
             >
               {total}
@@ -38,10 +38,10 @@ export default function DecklistPage() {
         {sections.map((section) => (
           <section
             key={section.key}
-            className="rounded-xl border border-p-border bg-p-surface p-4"
+            className="rounded-lg border-2 border-p-title bg-p-surface p-4"
           >
             <header className="mb-2 flex items-baseline justify-between border-b border-p-border pb-2">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-p-title">
+              <h2 className="font-pixel text-xs text-p-title">
                 {section.label}
               </h2>
               <span className="font-mono text-sm font-semibold text-p-primary">
@@ -57,7 +57,7 @@ export default function DecklistPage() {
         ))}
       </div>
 
-      <section className="mt-6 rounded-xl border border-p-border bg-p-surface p-4">
+      <section className="mt-6 rounded-lg border-2 border-p-title bg-p-surface p-4">
         <header className="mb-2 flex items-baseline justify-between border-b border-p-border pb-2">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-p-title">
             Sideboard / Wishlist

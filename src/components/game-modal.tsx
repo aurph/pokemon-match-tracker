@@ -33,14 +33,12 @@ const label = "text-xs font-medium uppercase tracking-wide text-p-muted";
 const HQ_COLORS = ["#C62828", "#F9A825", "#F5C518", "#9CCC65", "#2E7D32"];
 
 export function GameModal({
-  open,
   onClose,
   mode,
   game,
   deckNames,
   opponentDecks,
 }: {
-  open: boolean;
   onClose: () => void;
   mode: "add" | "edit";
   game?: Game;
@@ -51,29 +49,18 @@ export function GameModal({
   const formRef = useRef<HTMLFormElement>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState("W");
-  const [handQ, setHandQ] = useState<number | null>(null);
-  const [prized, setPrized] = useState<string[]>([]);
+  const [result, setResult] = useState(game?.result ?? "W");
+  const [handQ, setHandQ] = useState<number | null>(game?.handQuality ?? null);
+  const [prized, setPrized] = useState<string[]>(() => safeArr(game?.prizedCards));
 
   useEffect(() => {
-    if (!open) return;
-    setResult(game?.result ?? "W");
-    setHandQ(game?.handQuality ?? null);
-    setPrized(safeArr(game?.prizedCards));
-    setError(null);
-  }, [open, game]);
-
-  useEffect(() => {
-    if (!open) return;
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") formRef.current?.requestSubmit();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  if (!open) return null;
+  }, [onClose]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

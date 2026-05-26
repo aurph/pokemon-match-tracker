@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Elgyem Control Tracker
 
-## Getting Started
+A local-first Pokémon TCG match tracker built around an Elgyem control deck. Log a game in
+seconds, watch the dashboard update live, browse your decklist with real card art, and dig into
+matchup spreads, a prize map, win/loss streaks, and hand-quality analytics — all stored on-device
+in SQLite. Pixel/retro flavored, no cloud.
 
-First, run the development server:
+## Stack
+
+Next.js 16 (App Router, strict TS) · Tailwind v4 · better-sqlite3 + Drizzle ORM · Recharts ·
+Zod · Vitest + Testing Library. Local-first: one SQLite file, server-only data access.
+
+## Prerequisites
+
+- Node ≥ 18.18 (developed on Node 26) and `pnpm`.
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm db:migrate   # create the SQLite schema (elgyem.db in repo root)
+pnpm db:seed      # seed the 60-card decklist + a v1.0 iteration
+pnpm fetch-images # download real card art -> public/cards (set POKEMONTCG_API_KEY to avoid rate limits)
+pnpm exec tsx scripts/fetch-sprites.ts   # pixel Pokémon sprites -> public/sprites
+pnpm dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Production build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm build && pnpm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Where your data lives
 
-## Learn More
+- **`elgyem.db`** in the repo root — your games, decklist, iterations, tournaments. Gitignored.
+  Override the location with the `DB_PATH` env var.
+- **`public/cards/`** — downloaded card art (gitignored, re-fetchable).
+- **`public/sprites/`** — pixel Pokémon sprites (committed).
 
-To learn more about Next.js, take a look at the following resources:
+## Backup & restore
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Settings → Export JSON** (or GET `/api/export`) downloads a full snapshot.
+- **Settings → Import JSON** restores a snapshot (replaces current data).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+| Command | Purpose |
+|---|---|
+| `pnpm dev` / `pnpm build` / `pnpm start` | run the app |
+| `pnpm test` | Vitest unit + component tests |
+| `pnpm lint` · `pnpm exec tsc --noEmit` | lint + typecheck |
+| `pnpm db:generate` / `db:migrate` / `db:seed` | Drizzle migrations + seed |
+| `pnpm fetch-images` | (re)download card art |
+| `pnpm exec tsx scripts/fetch-sprites.ts` | (re)download pixel sprites |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Layout
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app` — pages (dashboard, games, decklist, prizes, iterations, tournaments, settings) + server actions + `/api/export`
+- `src/db` — Drizzle schema, client, repositories, migrate/seed
+- `src/lib` — stats, prizes, match-id, verified set-code map, sprites, enums
+- `src/components` — pixel UI, charts, the game modal
+- `docs/superpowers` — design doc + implementation plan
+
+## Notes
+
+- **Honest empty states:** stats render `—`, never a fabricated `0%`, until there's a real sample.
+- **Match grouping:** `match_id` is `slug(event)-YYYYMMDD-N`; the modal's "New match" control bumps `N` so BO3 matches never collide on the same event-day.
+- **Card images** are © The Pokémon Company — fine for personal/local use. Don't add public
+  sharing without first swapping art for placeholders.

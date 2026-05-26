@@ -18,19 +18,14 @@ const noop = () => {};
 beforeEach(() => vi.clearAllMocks());
 
 describe("GameModal", () => {
-  it("renders nothing when closed", () => {
-    const { container } = render(<GameModal open={false} onClose={noop} mode="add" {...props} />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
   it("shows the form when open", () => {
-    render(<GameModal open onClose={noop} mode="add" {...props} />);
+    render(<GameModal onClose={noop} mode="add" {...props} />);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByText(/log a game/i)).toBeInTheDocument();
   });
 
   it("blocks submit when mulligans are out of range", async () => {
-    render(<GameModal open onClose={noop} mode="add" {...props} />);
+    render(<GameModal onClose={noop} mode="add" {...props} />);
     fireEvent.change(screen.getByLabelText(/opponent deck/i), { target: { value: "Charizard ex" } });
     fireEvent.change(screen.getByLabelText(/my mulligans/i), { target: { value: "30" } });
     fireEvent.click(screen.getByRole("button", { name: /save game/i }));
@@ -39,14 +34,14 @@ describe("GameModal", () => {
   });
 
   it("submits a valid game", async () => {
-    render(<GameModal open onClose={noop} mode="add" {...props} />);
+    render(<GameModal onClose={noop} mode="add" {...props} />);
     fireEvent.change(screen.getByLabelText(/opponent deck/i), { target: { value: "Charizard ex" } });
     fireEvent.click(screen.getByRole("button", { name: /save game/i }));
     await waitFor(() => expect(addGameAction).toHaveBeenCalledTimes(1));
   });
 
   it("toggles prized-card chips", () => {
-    render(<GameModal open onClose={noop} mode="add" {...props} />);
+    render(<GameModal onClose={noop} mode="add" {...props} />);
     const chip = screen.getByRole("button", { name: "Dreepy" });
     fireEvent.click(chip);
     expect(screen.getByText(/prized cards \(1\)/i)).toBeInTheDocument();

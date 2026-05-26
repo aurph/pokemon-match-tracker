@@ -39,6 +39,7 @@ export function GamesView({
   const [res, setRes] = useState("all");
   const [recent, setRecent] = useState(false);
   const [view, setView] = useState<"table" | "cards">("table");
+  const [now] = useState(() => Date.now());
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -58,7 +59,7 @@ export function GamesView({
   );
 
   const filtered = useMemo(() => {
-    const cutoff = Date.now() - 30 * 864e5;
+    const cutoff = now - 30 * 864e5;
     return games.filter(
       (g) =>
         (opp === "all" || g.opponentDeck === opp) &&
@@ -66,7 +67,7 @@ export function GamesView({
         (res === "all" || g.result === res) &&
         (!recent || g.playedAt >= cutoff),
     );
-  }, [games, opp, fmt, res, recent]);
+  }, [games, opp, fmt, res, recent, now]);
 
   const openAdd = () => {
     setEditing(undefined);
@@ -199,14 +200,16 @@ export function GamesView({
         </div>
       )}
 
-      <GameModal
-        open={open}
-        onClose={() => setOpen(false)}
-        mode={editing ? "edit" : "add"}
-        game={editing}
-        deckNames={deckNames}
-        opponentDecks={opponentDecks}
-      />
+      {open && (
+        <GameModal
+          key={editing?.id ?? "new"}
+          onClose={() => setOpen(false)}
+          mode={editing ? "edit" : "add"}
+          game={editing}
+          deckNames={deckNames}
+          opponentDecks={opponentDecks}
+        />
+      )}
     </div>
   );
 }
