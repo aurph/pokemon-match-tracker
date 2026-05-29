@@ -8,6 +8,15 @@ out-tsc
 .expo
 .expo-shared
 
+# leftover Next.js build artifacts (project has since moved to Vite)
+.next
+next-env.d.ts
+
+# local SQLite data (DB is seeded at runtime; never commit game data)
+*.db
+*.db-shm
+*.db-wal
+
 # dependencies
 node_modules
 
