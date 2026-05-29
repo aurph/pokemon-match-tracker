@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-p-title: #2c1a4d;
+  --color-p-primary: #5e3fbd;
+  --color-p-accent: #f5c518;
+  --color-p-bg: #faf7ff;
+  --color-p-surface: #ffffff;
+  --color-p-muted: #6b5da0;
+  --color-p-border: #d9cfef;
+  --color-p-good: #2e7d32;
+  --color-p-bad: #c62828;
+  --color-p-warn: #f9a825;
+  --color-p-kpi-bg: #ede5ff;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-pixel: var(--font-silkscreen), ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-p-bg);
+  color: var(--color-p-title);
+}
+
+/* ---- Pixel / retro aesthetic helpers ---- */
+
+/* Upscale small sprites crisply instead of blurring them. */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Chunky 8-bit drop shadows (no blur). */
+.shadow-pixel {
+  box-shadow: 4px 4px 0 0 var(--color-p-title);
+}
+.shadow-pixel-accent {
+  box-shadow: 4px 4px 0 0 var(--color-p-accent);
+}
+.shadow-pixel-sm {
+  box-shadow: 2px 2px 0 0 var(--color-p-border);
+}
+
+/* Faint dot-grid backdrop for a subtle arcade-screen feel. */
+.dot-grid {
+  background-image: radial-gradient(var(--color-p-border) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Pixel display type: tighten line-height and kill anti-alias fuzz at small sizes. */
+.font-pixel {
+  letter-spacing: 0.02em;
+}

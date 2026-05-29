@@ -1,22 +1,30 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Pokémon Match Tracker API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: games
+    description: Game operations
+  - name: decklist
+    description: Deck card operations
+  - name: iterations
+    description: Deck iteration operations
+  - name: dashboard
+    description: Dashboard stats
+  - name: settings
+    description: Settings and data management
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +32,286 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /games:
+    get:
+      operationId: listGames
+      tags: [games]
+      summary: List all games
+      responses:
+        "200":
+          description: List of games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+    post:
+      operationId: createGame
+      tags: [games]
+      summary: Log a new game
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameInput"
+      responses:
+        "201":
+          description: Created game
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /games/{id}:
+    patch:
+      operationId: updateGame
+      tags: [games]
+      summary: Update a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameInput"
+      responses:
+        "200":
+          description: Updated game
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteGame
+      tags: [games]
+      summary: Delete a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+
+  /games/meta:
+    get:
+      operationId: getGamesMeta
+      tags: [games]
+      summary: Get deck names and opponent decks for form dropdowns
+      responses:
+        "200":
+          description: Game metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GamesMeta"
+
+  /games/custom-opponent-decks:
+    post:
+      operationId: addCustomOpponentDeck
+      tags: [games]
+      summary: Add a custom opponent deck name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomOpponentDeckInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get aggregated dashboard stats
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+
+  /decklist:
+    get:
+      operationId: listDeckCards
+      tags: [decklist]
+      summary: List all deck cards
+      responses:
+        "200":
+          description: Deck cards with wishlist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DecklistData"
+
+  /decklist/{id}:
+    patch:
+      operationId: updateDeckCard
+      tags: [decklist]
+      summary: Update a deck card
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeckCardPatch"
+      responses:
+        "200":
+          description: Updated card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /iterations:
+    get:
+      operationId: listIterations
+      tags: [iterations]
+      summary: List deck iterations
+      responses:
+        "200":
+          description: List of iterations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Iteration"
+    post:
+      operationId: createIteration
+      tags: [iterations]
+      summary: Log a deck change
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IterationInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Iteration"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /export:
+    get:
+      operationId: exportData
+      tags: [settings]
+      summary: Export all data as JSON
+      responses:
+        "200":
+          description: Full data export
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /settings/import:
+    post:
+      operationId: importData
+      tags: [settings]
+      summary: Import data from backup JSON
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImportDataInput"
+      responses:
+        "200":
+          description: Import result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+        "400":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /settings/wipe-games:
+    post:
+      operationId: wipeGames
+      tags: [settings]
+      summary: Delete all games
+      responses:
+        "200":
+          description: Wiped
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /settings/wipe-all:
+    post:
+      operationId: wipeAll
+      tags: [settings]
+      summary: Wipe all data
+      responses:
+        "200":
+          description: Wiped
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +322,424 @@ components:
       required:
         - status
 
+    OkResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+      required:
+        - ok
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Game:
+      type: object
+      required:
+        - id
+        - matchId
+        - gameNumber
+        - playedAt
+        - event
+        - format
+        - opponentDeck
+        - going
+        - myMulligans
+        - oppMulligans
+        - result
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+        matchId:
+          type: string
+        gameNumber:
+          type: integer
+        playedAt:
+          type: integer
+        event:
+          type: string
+        format:
+          type: string
+        opponentDeck:
+          type: string
+        opponentName:
+          type: ["string", "null"]
+        tournamentId:
+          type: ["string", "null"]
+        round:
+          type: ["integer", "null"]
+        coinFlip:
+          type: ["string", "null"]
+        going:
+          type: string
+        myMulligans:
+          type: integer
+        oppMulligans:
+          type: integer
+        handQuality:
+          type: ["integer", "null"]
+        prizeTrade:
+          type: ["string", "null"]
+        turnCount:
+          type: ["integer", "null"]
+        timeUsedMin:
+          type: ["integer", "null"]
+        lockTurn:
+          type: ["integer", "null"]
+        keyCardsDrawn:
+          type: ["string", "null"]
+        techCardsUsed:
+          type: ["string", "null"]
+        prizedCards:
+          type: ["string", "null"]
+        result:
+          type: string
+        mistakes:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: integer
+        updatedAt:
+          type: integer
+
+    GameInput:
+      type: object
+      required:
+        - event
+        - format
+        - opponentDeck
+        - going
+        - result
+        - myMulligans
+        - oppMulligans
+        - playedAt
+      properties:
+        event:
+          type: string
+        format:
+          type: string
+        opponentDeck:
+          type: string
+        opponentName:
+          type: ["string", "null"]
+        round:
+          type: ["integer", "null"]
+        going:
+          type: string
+        coinFlip:
+          type: ["string", "null"]
+        result:
+          type: string
+        myMulligans:
+          type: integer
+        oppMulligans:
+          type: integer
+        handQuality:
+          type: ["integer", "null"]
+        turnCount:
+          type: ["integer", "null"]
+        timeUsedMin:
+          type: ["integer", "null"]
+        lockTurn:
+          type: ["integer", "null"]
+        prizeTrade:
+          type: ["string", "null"]
+        keyCardsDrawn:
+          type: ["string", "null"]
+        techCardsUsed:
+          type: ["string", "null"]
+        prizedCards:
+          type: array
+          items:
+            type: string
+        mistakes:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        playedAt:
+          type: integer
+        newMatch:
+          type: boolean
+        matchId:
+          type: ["string", "null"]
+        gameNumber:
+          type: ["integer", "null"]
+
+    GamesMeta:
+      type: object
+      required:
+        - deckNames
+        - opponentDecks
+      properties:
+        deckNames:
+          type: array
+          items:
+            type: string
+        opponentDecks:
+          type: array
+          items:
+            type: string
+
+    CustomOpponentDeckInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    DeckCard:
+      type: object
+      required:
+        - id
+        - count
+        - name
+        - setCode
+        - setNumber
+        - category
+        - orderIndex
+      properties:
+        id:
+          type: string
+        count:
+          type: integer
+        name:
+          type: string
+        setCode:
+          type: string
+        setNumber:
+          type: string
+        category:
+          type: string
+        role:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        imageLocalPath:
+          type: ["string", "null"]
+        orderIndex:
+          type: integer
+
+    WishlistItem:
+      type: object
+      required:
+        - id
+        - count
+        - name
+        - setCode
+        - setNumber
+        - category
+        - orderIndex
+      properties:
+        id:
+          type: string
+        count:
+          type: integer
+        name:
+          type: string
+        setCode:
+          type: string
+        setNumber:
+          type: string
+        category:
+          type: string
+        role:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        imageLocalPath:
+          type: ["string", "null"]
+        orderIndex:
+          type: integer
+        priority:
+          type: ["string", "null"]
+        replaces:
+          type: ["string", "null"]
+        reason:
+          type: ["string", "null"]
+
+    DecklistData:
+      type: object
+      required:
+        - cards
+        - wishlist
+      properties:
+        cards:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeckCard"
+        wishlist:
+          type: array
+          items:
+            $ref: "#/components/schemas/WishlistItem"
+
+    DeckCardPatch:
+      type: object
+      properties:
+        count:
+          type: ["integer", "null"]
+        role:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+
+    Iteration:
+      type: object
+      required:
+        - id
+        - dated
+        - version
+        - createdAt
+      properties:
+        id:
+          type: string
+        dated:
+          type: integer
+        version:
+          type: string
+        cardsIn:
+          type: ["string", "null"]
+        cardsOut:
+          type: ["string", "null"]
+        reasoning:
+          type: ["string", "null"]
+        testedVs:
+          type: ["string", "null"]
+        verdict:
+          type: ["string", "null"]
+        createdAt:
+          type: integer
+
+    IterationInput:
+      type: object
+      required:
+        - version
+      properties:
+        version:
+          type: string
+        date:
+          type: ["string", "null"]
+        cardsIn:
+          type: ["string", "null"]
+        cardsOut:
+          type: ["string", "null"]
+        reasoning:
+          type: ["string", "null"]
+        testedVs:
+          type: ["string", "null"]
+        verdict:
+          type: ["string", "null"]
+
+    Dashboard:
+      type: object
+      required:
+        - games
+        - kpis
+        - rollingWinPct
+        - handQualityHistogram
+        - matchupTable
+        - recentGames
+        - streak
+        - longestWinStreak
+        - favoriteVictim
+        - nemesis
+      properties:
+        games:
+          type: array
+          items:
+            $ref: "#/components/schemas/Game"
+        kpis:
+          type: object
+          properties:
+            total:
+              type: integer
+            winPct:
+              type: ["number", "null"]
+            last10WinPct:
+              type: ["number", "null"]
+            going1stWinPct:
+              type: ["number", "null"]
+            going2ndWinPct:
+              type: ["number", "null"]
+            mulliganRate:
+              type: ["number", "null"]
+            bo1WinPct:
+              type: ["number", "null"]
+            bo3GameWinPct:
+              type: ["number", "null"]
+            bo3MatchWinPct:
+              type: ["number", "null"]
+            avgTurns:
+              type: ["number", "null"]
+            avgTimeMin:
+              type: ["number", "null"]
+            avgHandQuality:
+              type: ["number", "null"]
+          required:
+            - total
+        rollingWinPct:
+          type: array
+          items:
+            type: object
+            properties:
+              x:
+                type: integer
+              y:
+                type: number
+            required: [x, y]
+        handQualityHistogram:
+          type: array
+          items:
+            type: object
+            properties:
+              quality:
+                type: integer
+              W:
+                type: integer
+              L:
+                type: integer
+              T:
+                type: integer
+            required: [quality, W, L, T]
+        matchupTable:
+          type: array
+          items:
+            type: object
+        recentGames:
+          type: array
+          items:
+            $ref: "#/components/schemas/Game"
+        streak:
+          type: object
+          properties:
+            type:
+              type: ["string", "null"]
+            length:
+              type: integer
+          required: [length]
+        longestWinStreak:
+          type: integer
+        favoriteVictim:
+          type: ["object", "null"]
+        nemesis:
+          type: ["object", "null"]
+
+    ImportDataInput:
+      type: object
+      properties:
+        json:
+          type: string
+      required:
+        - json
