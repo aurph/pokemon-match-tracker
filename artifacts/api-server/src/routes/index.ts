@@ -13,7 +13,7 @@ import { listDeckCards, updateDeckCard } from "../db/deck-cards-repo";
 import { listIterations, createIteration } from "../db/iterations-repo";
 import { listWishlist } from "../db/wishlist-repo";
 import { seedDeckCards, seedFirstIteration } from "../db/seed-data";
-import { deckCards, games as gamesTable, iterations as iterTable, wishlist as wlTable, customOpponentDecks as codTable } from "../db/schema";
+import { deckCards, games as gamesTable, iterations as iterTable, wishlist as wlTable, customOpponentDecks as codTable, tournaments as tourTable } from "../db/schema";
 import { OPPONENT_DECKS } from "../lib/enums";
 import {
   winPct,
@@ -206,6 +206,8 @@ router.get("/export", (_req, res) => {
     deckCards: listDeckCards(db),
     iterations: listIterations(db),
     wishlist: listWishlist(db),
+    customOpponentDecks: db.select().from(codTable).all(),
+    tournaments: db.select().from(tourTable).all(),
     exportedAt: new Date().toISOString(),
   };
   res.setHeader("Content-Disposition", `attachment; filename="pokemon-tracker-export.json"`);
@@ -215,8 +217,46 @@ router.get("/export", (_req, res) => {
 router.post("/settings/import", (req, res) => {
   try {
     const raw = req.body.json;
-    const data = JSON.parse(raw);
-    res.json({ ok: true, imported: Object.keys(data) });
+    const data = typeof raw === "string" ? JSON.parse(raw) : raw;
+
+    db.transaction(() => {
+      if (Array.isArray(data.games) && data.games.length > 0) {
+        db.delete(gamesTable).run();
+        for (const g of data.games) db.insert(gamesTable).values(g).run();
+      }
+      if (Array.isArray(data.deckCards) && data.deckCards.length > 0) {
+        db.delete(deckCards).run();
+        for (const c of data.deckCards) db.insert(deckCards).values(c).run();
+      }
+      if (Array.isArray(data.iterations) && data.iterations.length > 0) {
+        db.delete(iterTable).run();
+        for (const it of data.iterations) db.insert(iterTable).values(it).run();
+      }
+      if (Array.isArray(data.wishlist) && data.wishlist.length > 0) {
+        db.delete(wlTable).run();
+        for (const w of data.wishlist) db.insert(wlTable).values(w).run();
+      }
+      if (Array.isArray(data.customOpponentDecks) && data.customOpponentDecks.length > 0) {
+        db.delete(codTable).run();
+        for (const c of data.customOpponentDecks) db.insert(codTable).values(c).run();
+      }
+      if (Array.isArray(data.tournaments) && data.tournaments.length > 0) {
+        db.delete(tourTable).run();
+        for (const t of data.tournaments) db.insert(tourTable).values(t).run();
+      }
+    });
+
+    res.json({
+      ok: true,
+      imported: {
+        games: data.games?.length ?? 0,
+        deckCards: data.deckCards?.length ?? 0,
+        iterations: data.iterations?.length ?? 0,
+        wishlist: data.wishlist?.length ?? 0,
+        customOpponentDecks: data.customOpponentDecks?.length ?? 0,
+        tournaments: data.tournaments?.length ?? 0,
+      },
+    });
   } catch (err) {
     res.status(400).json({ error: String(err) });
   }

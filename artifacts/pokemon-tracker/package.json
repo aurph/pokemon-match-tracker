@@ -74,12 +74,5 @@
     "wouter": "^3.3.5",
     "zod": "catalog:"
   },
-  "dependencies": {
-    "@testing-library/react": "^16.3.2",
-    "better-sqlite3": "^12.10.0",
-    "drizzle-orm": "catalog:",
-    "next": "^16.2.6",
-    "uuidv7": "^1.2.1",
-    "vitest": "^4.1.7"
-  }
+  "dependencies": {}
 }
