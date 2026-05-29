@@ -1,23 +1,26 @@
-# Replit configuration for the Elgyem Control Tracker.
+# Replit configuration for the Pokemon Match Tracker.
 # Workspace "Run" uses dev; deploy as a RESERVED VM (deploymentTarget = "gce")
 # because the app stores data in a single SQLite file that must live on a
 # persistent, single-instance disk. Do NOT use Autoscale — it's ephemeral and
 # would wipe your logged games.
+#
+# pnpm comes from corepack (see package.json "packageManager"), not Nix.
 
 entrypoint = "src/app/page.tsx"
-run = "pnpm dev -- -H 0.0.0.0 -p ${PORT:-3000}"
+run = "corepack pnpm install && corepack pnpm dev -- -H 0.0.0.0 -p ${PORT:-3000}"
 
 [env]
 DB_PATH = "elgyem.db"
 NEXT_TELEMETRY_DISABLED = "1"
+COREPACK_ENABLE_DOWNLOAD_PROMPT = "0"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "gce"
-build = ["sh", "-c", "pnpm install && pnpm build"]
-run = ["sh", "-c", "pnpm start -- -H 0.0.0.0 -p ${PORT:-3000}"]
+build = ["sh", "-c", "corepack pnpm install --frozen-lockfile && corepack pnpm build"]
+run = ["sh", "-c", "corepack pnpm start -- -H 0.0.0.0 -p ${PORT:-3000}"]
 
 [[ports]]
 localPort = 3000
