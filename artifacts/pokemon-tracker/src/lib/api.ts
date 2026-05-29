@@ -26,6 +26,7 @@ export const api = {
   listDeckCards: () => req<{ cards: any[]; wishlist: any[] }>("/decklist"),
   updateDeckCard: (id: string, body: any) =>
     req<any>(`/decklist/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
+  getMetaSnapshot: () => req<any>("/meta/snapshot"),
   listIterations: () => req<any[]>("/iterations"),
   createIteration: (body: any) =>
     req<any>("/iterations", { method: "POST", body: JSON.stringify(body) }),

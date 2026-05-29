@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { ChevronDown } from "lucide-react";
 import { api } from "@/lib/api";
 import { PageHeader } from "@/components/page-header";
 import { KpiTile } from "@/components/kpi-tile";
 import { WinRateChart } from "@/components/win-rate-chart";
 import { HandQualityChart } from "@/components/hand-quality-chart";
 import { MatchupTable } from "@/components/matchup-table";
+import { DeckStrip } from "@/components/deck-strip";
+import { MetaSnapshot } from "@/components/meta-snapshot";
 import { PixelSprite } from "@/components/pixel-sprite";
 import { POKEBALL_SPRITE } from "@/lib/sprites";
 
@@ -45,6 +49,8 @@ function FunStat({
 }
 
 export function DashboardPage() {
+  const [showAllStats, setShowAllStats] = useState(false);
+  const [showTrends, setShowTrends] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: ["dashboard"],
     queryFn: api.getDashboard,
@@ -56,10 +62,12 @@ export function DashboardPage() {
   const { kpis, streak, favoriteVictim: fav, nemesis: nem, recentGames: recent } = data;
   const total = kpis?.total ?? 0;
 
-  const kpiList = [
+  const headlineKpis = [
     { label: "Total games", value: total === 0 ? null : String(total) },
     { label: "Win %", value: pct(kpis?.winPct) },
     { label: "Last-10 W%", value: pct(kpis?.last10WinPct) },
+  ];
+  const moreKpis = [
     { label: "Going 1st W%", value: pct(kpis?.going1stWinPct) },
     { label: "Going 2nd W%", value: pct(kpis?.going2ndWinPct) },
     { label: "Mulligan rate", value: pct(kpis?.mulliganRate) },
@@ -72,7 +80,7 @@ export function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader
         title="Dashboard"
         subtitle="Your deck & matchups at a glance"
@@ -104,18 +112,59 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {kpiList.map((k) => (
+      <div className="grid grid-cols-3 gap-3">
+        {headlineKpis.map((k) => (
           <KpiTile key={k.label} label={k.label} value={k.value} />
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <WinRateChart data={data.rollingWinPct ?? []} />
-        <HandQualityChart data={data.handQualityHistogram ?? []} />
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowAllStats((v) => !v)}
+          className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider text-p-muted hover:text-p-title"
+        >
+          <ChevronDown
+            size={14}
+            className={"transition-transform " + (showAllStats ? "rotate-180" : "")}
+          />
+          {showAllStats ? "Hide" : "All"} stats
+        </button>
+        {showAllStats && (
+          <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {moreKpis.map((k) => (
+              <KpiTile key={k.label} label={k.label} value={k.value} />
+            ))}
+          </div>
+        )}
       </div>
 
-      <MatchupTable rows={data.matchupTable ?? []} />
+      <DeckStrip />
+
+      <MetaSnapshot />
+
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowTrends((v) => !v)}
+          className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider text-p-muted hover:text-p-title"
+        >
+          <ChevronDown
+            size={14}
+            className={"transition-transform " + (showTrends ? "rotate-180" : "")}
+          />
+          {showTrends ? "Hide" : "Show"} trends & matchups
+        </button>
+        {showTrends && (
+          <div className="mt-2 space-y-4">
+            <div className="grid gap-4 lg:grid-cols-2">
+              <WinRateChart data={data.rollingWinPct ?? []} />
+              <HandQualityChart data={data.handQualityHistogram ?? []} />
+            </div>
+            <MatchupTable rows={data.matchupTable ?? []} />
+          </div>
+        )}
+      </div>
 
       <section className="rounded-lg border-2 border-p-title bg-p-surface">
         <h3 className="border-b-2 border-p-border px-3 py-2 font-pixel text-xs text-p-title">
@@ -126,7 +175,7 @@ export function DashboardPage() {
         ) : (
           <ul className="divide-y divide-p-border">
             {recent.map((g: any) => (
-              <li key={g.id} className="flex items-center gap-3 px-3 py-2 text-sm">
+              <li key={g.id} className="flex items-center gap-3 px-3 py-1.5 text-sm">
                 <ResultChip r={g.result} />
                 <span className="flex-1 truncate font-medium text-p-title">{g.opponentDeck}</span>
                 <span className="hidden text-xs text-p-muted sm:inline">going {g.going}</span>

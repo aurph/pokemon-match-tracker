@@ -34,6 +34,7 @@ import {
   nemesis,
 } from "../lib/stats";
 import { asc } from "drizzle-orm";
+import { getMetaSnapshot } from "../lib/limitless";
 
 runMigrations(db);
 
@@ -174,6 +175,17 @@ router.patch("/decklist/:id", (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     res.status(400).json({ error: String(err) });
+  }
+});
+
+router.get("/meta/snapshot", async (req, res) => {
+  const limit = Math.min(Math.max(Number(req.query.tournaments) || 8, 1), 25);
+  const topN = Math.min(Math.max(Number(req.query.topN) || 16, 1), 64);
+  try {
+    const snapshot = await getMetaSnapshot(limit, topN);
+    res.json(snapshot);
+  } catch (err) {
+    res.status(502).json({ error: `Limitless unavailable: ${String(err)}` });
   }
 });
 

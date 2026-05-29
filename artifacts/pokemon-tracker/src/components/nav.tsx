@@ -27,27 +27,29 @@ export function Nav() {
     <nav className="flex items-center gap-2 overflow-x-auto border-b-2 border-p-title bg-p-surface px-4 py-2 sm:w-56 sm:flex-col sm:items-stretch sm:gap-1 sm:overflow-visible sm:border-b-0 sm:border-r-2 sm:px-3 sm:py-5">
       <div className="flex shrink-0 items-center gap-2 sm:mb-5 sm:px-1">
         <PixelSprite src={POKEBALL_SPRITE} alt="" size={32} />
-        <span className="font-pixel text-[11px] leading-[1.5] text-p-primary">
+        <span className="hidden font-pixel text-[11px] leading-[1.5] text-p-primary sm:block">
           MATCH
           <br />
           TRACKER
         </span>
       </div>
-      <div className="flex flex-1 gap-1 sm:flex-none sm:flex-col">
+      <div className="flex flex-1 justify-around gap-1 sm:flex-none sm:flex-col sm:justify-start">
         {items.map(({ href, label, icon: Icon }) => {
           const active = href === "/" ? location === "/" : location.startsWith(href);
           return (
             <Link
               key={href}
               href={href}
-              className={`flex shrink-0 items-center gap-2 rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors ${
+              aria-label={label}
+              title={label}
+              className={`flex shrink-0 items-center justify-center gap-2 rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors sm:justify-start ${
                 active
                   ? "border-p-primary bg-p-kpi-bg text-p-primary"
                   : "border-transparent text-p-muted hover:border-p-border hover:bg-p-kpi-bg hover:text-p-title"
               }`}
             >
               <Icon size={18} />
-              <span>{label}</span>
+              <span className="hidden sm:inline">{label}</span>
             </Link>
           );
         })}
