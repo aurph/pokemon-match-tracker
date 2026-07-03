@@ -4,15 +4,6 @@ A local-first app for logging Pokémon TCG games and turning them into deep, wel
 
 > Log every game, then let the app surface your win rates, streaks, matchup spread, hand-quality trends, favorite victims and nemeses — plus a live snapshot of the competitive metagame pulled from Limitless.
 
-## Screenshots
-
-<!-- Drop images into docs/screenshots/ and uncomment:
-![Dashboard](docs/screenshots/dashboard.png)
-![Decklist](docs/screenshots/decklist.png)
--->
-
-_Add screenshots to `docs/screenshots/` and link them here._
-
 ## Features
 
 - **Game logging** — event, format (BO1/BO3), opponent deck, going 1st/2nd, result, mulligans, hand quality, turn count, time, lock turn, prize trade, notes.
